@@ -181,9 +181,9 @@ smartctl_version="$(/usr/sbin/smartctl -V | head -n1 | awk '$1 == "smartctl" {pr
 
 echo "smartctl_version{version=\"${smartctl_version}\"} 1" | format_output
 
-if [[ "$(expr "${smartctl_version}" : '\([0-9]*\)\..*')" -lt 6 ]]; then
-  exit
-fi
+#if [[ "$(expr "${smartctl_version}" : '\([0-9]*\)\..*')" -lt 6 ]]; then
+#  #exit
+#fi
 
 device_list="$(/usr/sbin/smartctl --scan-open | awk '/^\/dev/{print $1 "|" $3}')"
 

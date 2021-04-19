@@ -93,6 +93,15 @@ parse_smartctl_scsi_attributes() {
     Blocks_received_from_initiator_) lbas_written="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
     Accumulated_start-stop_cycles) power_cycle="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
     Elements_in_grown_defect_list) grown_defects="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
+
+    # nvme
+    Power_On_Hours) power_on="$(echo "${attr_value}" | sed 's/,//g' | awk '{ printf "%e\n", $1 }')" ;;
+    Temperature) temp_cel="$(echo "${attr_value}" | cut -f1 -d' ' | awk '{ printf "%e\n", $1 }')" ;;
+    Power_Cycles) power_cycle="$(echo "${attr_value}" | sed 's/,//g' | awk '{ printf "%e\n", $1 }')" ;;
+    Percentage_Used) used_percent="$(echo "${attr_value}" | sed 's/%//' | awk '{ printf "%e\n", $1 }')" ;;
+    Data_Units_Read) data_read="$(echo "${attr_value}" | cut -f1 -d' ' | sed 's/,//g' | awk '{ printf "%e\n", $1 }')" ;;
+    Data_Units_Written) data_written="$(echo "${attr_value}" | cut -f1 -d' ' | sed 's/,//g' | awk '{ printf "%e\n", $1 }')" ;;
+    Media_and_Data_Integrity_Errors) media_data_errors="$(echo "${attr_value}" | sed 's/,//g' | awk '{ printf "%e\n", $1 }')" ;;
     esac
   done
   [ -n "$power_on" ] && echo "power_on_hours_raw_value{${labels},smart_id=\"9\"} ${power_on}"
@@ -101,6 +110,10 @@ parse_smartctl_scsi_attributes() {
   [ -n "$lbas_written" ] && echo "total_lbas_written_raw_value{${labels},smart_id=\"242\"} ${lbas_written}"
   [ -n "$power_cycle" ] && echo "power_cycle_count_raw_value{${labels},smart_id=\"12\"} ${power_cycle}"
   [ -n "$grown_defects" ] && echo "grown_defects_count_raw_value{${labels},smart_id=\"12\"} ${grown_defects}"
+  [ -n "$used_percent" ] && echo "used_percent_raw_value{${labels},smart_id=\"12\"} ${used_percent}"
+  [ -n "$data_read" ] && echo "data_read_raw_value{${labels},smart_id=\"12\"} ${data_read}"
+  [ -n "$data_written" ] && echo "data_written_raw_value{${labels},smart_id=\"12\"} ${data_written}"
+  [ -n "$media_data_errors" ] && echo "media_data_errors_raw_value{${labels},smart_id=\"12\"} ${media_data_errors}"
 }
 
 parse_smartctl_info() {

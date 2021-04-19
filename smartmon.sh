@@ -25,6 +25,7 @@ SMARTCTLAWK
 smartmon_attrs="$(
   cat <<'SMARTMONATTRS'
 airflow_temperature_cel
+available_reservd_space
 command_timeout
 current_pending_sector
 end_to_end_error
@@ -52,6 +53,7 @@ sata_downshift_count
 seek_error_rate
 spin_retry_count
 spin_up_time
+ssd_life_left
 start_stop_count
 temperature_case
 temperature_celsius
